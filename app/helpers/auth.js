@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import { ref, firebaseAuth } from 'config/constants'
 
 export default function auth () {
