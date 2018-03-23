@@ -1,10 +1,13 @@
 import firebase from 'firebase'
 
 const config = {
-  apiKey: "AIzaSyCSEjdMSOuBRri4KAv5L0D_kzXqDxxi9v0",
-  authDomain: "duckr.firebaseapp.com",
-  databaseURL: "https://duckr.firebaseio.com",
-}
+  apiKey: "AIzaSyDBSVyAnre4bfmgYaJtZQ6ITr0OhcvF-yo",
+  authDomain: "payments-1bda2.firebaseapp.com",
+  databaseURL: "https://payments-1bda2.firebaseio.com",
+  projectId: "payments-1bda2",
+  storageBucket: "payments-1bda2.appspot.com",
+  messagingSenderId: "400162303088"
+};
 
 firebase.initializeApp(config)
 
