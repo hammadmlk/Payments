@@ -1,20 +1,27 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
-import { Navigation } from 'components'
 import { connect } from 'react-redux'
-import { container, innerContainer } from './styles.css'
-import * as usersLikesActionCreators from 'redux/modules/usersLikes'
-import * as userActionCreators from 'redux/modules/users'
-import { formatUserInfo } from 'helpers/utils'
 import { firebaseAuth } from 'config/constants'
+
+import * as peopleActions from 'redux/modules/people'
+import * as projectActions from 'redux/modules/projects'
+
+import { AddTransactionContainer } from 'containers'
+import { Navigation } from 'components'
+
+import FontIcon from 'material-ui/FontIcon'
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation'
+import Paper from 'material-ui/Paper'
+
+const addTransactionIcon = <FontIcon className='material-icons'>note_add</FontIcon>
+const transactionsIcon = <FontIcon className='material-icons'>list</FontIcon>
+const projectsIcon = <FontIcon className='material-icons'>assignment</FontIcon>
+const peopleIcon = <FontIcon className='material-icons'>people</FontIcon>
 
 const MainContainer = React.createClass({
   propTypes: {
-    isAuthed: PropTypes.bool.isRequired,
-    setUsersLikes: PropTypes.func.isRequired,
-    authUser: PropTypes.func.isRequired,
-    fetchingUserSuccess: PropTypes.func.isRequired,
-    removeFetchingUser: PropTypes.func.isRequired,
+    fetchAndHandlePeople: PropTypes.func.isRequired,
+    fetchAndHandleProjects: PropTypes.func.isRequired,
   },
   contextTypes: {
     router: PropTypes.object.isRequired,
@@ -22,35 +29,72 @@ const MainContainer = React.createClass({
   componentDidMount () {
     firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
-        const userData = user.providerData[0]
-        const userInfo = formatUserInfo(userData.displayName, userData.photoURL, user.uid)
-        this.props.authUser(user.uid)
-        this.props.fetchingUserSuccess(user.uid, userInfo, Date.now())
-        this.props.setUsersLikes()
         if (this.props.location.pathname === '/') {
-          this.context.router.replace('feed')
+          this.context.router.replace('addtransaction')
         }
+        this.props.fetchAndHandlePeople()
+        this.props.fetchAndHandleProjects()
       } else {
-         this.props.removeFetchingUser()
+        this.context.router.replace('auth')
       }
     })
   },
+  getNavSelectedIndex () {
+    const path = this.props.location.pathname.toLowerCase()
+    switch (path) {
+      case '/addtransaction':
+        return 0
+      case '/transactions':
+        return 1
+      case '/projects':
+        return 2
+      case '/people':
+        return 3
+      default:
+        return -1
+    }
+  },
   render () {
-    return this.props.isFetching === true
-      ? null
-      : <div className={container}>
-          <Navigation isAuthed={this.props.isAuthed} />
-          <div className={innerContainer}>
-            {this.props.children}
-          </div>
+    return (
+      <div style={{minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div>
+          {this.props.children}
+          <br/>
+          <br/>
+          <br/>
         </div>
+        <nav>
+          <Paper zDepth={3} style={{zIndex: 3, position: 'fixed', bottom: 0, left: 0, right: 0}}>
+            <BottomNavigation selectedIndex={this.getNavSelectedIndex()} >
+              <BottomNavigationItem
+                label='add'
+                icon={addTransactionIcon}
+                onClick={() => (this.context.router.replace('addTransaction'))}/>
+              <BottomNavigationItem
+                label='logs'
+                icon={transactionsIcon}
+                onClick={() => (this.context.router.replace('transactions'))}/>
+              <BottomNavigationItem
+                label='projects'
+                icon={projectsIcon}
+                onClick={() => (this.context.router.replace('projects'))}/>
+              <BottomNavigationItem
+                label='people'
+                icon={peopleIcon}
+                onClick={() => (this.context.router.replace('people'))}/>
+            </BottomNavigation>
+          </Paper>
+        </nav>
+
+      </div>
+    )
   },
 })
 
 export default connect(
-  ({users}) => ({isAuthed: users.isAuthed, isFetching: users.isFetching}),
+  () => ({}),
   (dispatch) => bindActionCreators({
-    ...usersLikesActionCreators,
-    ...userActionCreators,
+    ...peopleActions,
+    ...projectActions,
   }, dispatch)
 )(MainContainer)

@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getRoutes from 'config/routes'
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
@@ -17,7 +18,7 @@ const store = createStore(combineReducers({...reducers, routing: routerReducer})
 const history = syncHistoryWithStore(hashHistory, store)
 
 function checkAuth (nextState, replace) {
-  if (store.getState().users.isFetching === true) {
+  if (store.getState().authentication.get('isFetching') === true) {
     return
   }
 
@@ -25,7 +26,7 @@ function checkAuth (nextState, replace) {
   const nextPathName = nextState.location.pathname
   if (nextPathName === '/' || nextPathName === '/auth') {
     if (isAuthed === true) {
-      replace('/feed')
+      replace('/addTransaction')
     }
   } else {
     if (isAuthed !== true) {
@@ -36,6 +37,8 @@ function checkAuth (nextState, replace) {
 
 ReactDOM.render(
   <Provider store={store}>
-    {getRoutes(checkAuth, history)}
+    <MuiThemeProvider>
+      {getRoutes(checkAuth, history)}
+    </MuiThemeProvider>
   </Provider>,
 document.getElementById('app'))

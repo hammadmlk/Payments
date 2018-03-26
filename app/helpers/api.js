@@ -1,22 +1,63 @@
 import { ref } from 'config/constants'
 
-function saveToDucks (duck) {
-  const duckId = ref.child('ducks').push().key
-  const duckPromise = ref.child(`ducks/${duckId}`).set({...duck, duckId})
+function createPerson (person) {
+  const personId = ref.child('people').push().key
+  const personPromise = ref.child(`people/${personId}`).set({...person, personId})
   return {
-    duckId,
-    duckPromise,
+    personId,
+    personPromise,
   }
 }
 
-function saveToUsersDucks (duck, duckId) {
-  return ref.child(`usersDucks/${duck.uid}/${duckId}`)
-    .set({...duck, duckId})
+function createProject (project) {
+  const projectId = ref.child('projects').push().key
+  const projectPromise = ref.child(`projects/${projectId}`).set({...project, projectId})
+  return {
+    projectId,
+    projectPromise,
+  }
 }
 
-function saveLikeCount (duckId) {
-  return ref.child(`likeCount/${duckId}`).set(0)
+function createTransaction (projectId, transaction) {
+  const transactionId = ref.child(`transactions/${projectId}`).push().key
+  const transactionPromise = ref.child(`transactions/${projectId}/${transactionId}`).set({...transaction, transactionId, projectId})
+  return {
+    transactionId,
+    transactionPromise,
+  }
 }
+
+export function saveProject (project) {
+  const {projectId, projectPromise} = createProject(project)
+  return projectPromise.then(() => ({...project, projectId}))
+}
+
+export function fetchProjects () {
+  return ref.child('projects').once('value')
+    .then((snapshot) => snapshot.val() || {})
+}
+
+export function savePerson (person) {
+  const {personId, personPromise} = createPerson(person)
+  return personPromise.then(() => ({...person, personId}))
+}
+
+export function fetchPeople () {
+  return ref.child('people').once('value')
+    .then((snapshot) => snapshot.val() || {})
+}
+
+export function saveTransaction (projectId, transaction) {
+  const {transactionId, transactionPromise} = createTransaction(projectId, transaction)
+  return transactionPromise.then(() => ({...transaction, projectId, transactionId}))
+}
+
+export function fetchTransactions (projectId) {
+  return ref.child(`transactions/${projectId}`).once('value')
+    .then((snapshot) => snapshot.val() || {})
+}
+
+/*
 
 export function saveDuck (duck) {
   const { duckId, duckPromise } = saveToDucks(duck)
@@ -35,62 +76,4 @@ export function listenToFeed (cb, errorCB) {
     cb({feed, sortedIds})
   }, errorCB)
 }
-
-export function fetchUsersLikes (uid) {
-  return ref.child(`usersLikes/${uid}`).once('value')
-    .then((snapshot) => snapshot.val() || {})
-}
-
-export function saveToUsersLikes (uid, duckId) {
-  return ref.child(`usersLikes/${uid}/${duckId}`).set(true)
-}
-
-export function deleteFromUsersLikes (uid, duckId) {
-  return ref.child(`usersLikes/${uid}/${duckId}`).set(null)
-}
-
-export function incrementNumberOfLikes (duckId) {
-  return ref.child(`likeCount/${duckId}`)
-    .transaction((currentValue = 0) => currentValue + 1)
-}
-
-export function decrementNumberOfLikes (duckId) {
-  return ref.child(`likeCount/${duckId}`)
-    .transaction((currentValue = 0) => currentValue - 1)
-}
-
-export function fetchUsersDucks (uid) {
-  return ref.child(`usersDucks/${uid}`).once('value')
-    .then((snapshot) => snapshot.val() || {})
-}
-
-export function fetchUser (uid) {
-  return ref.child(`users/${uid}`).once('value')
-    .then((snapshot) => snapshot.val())
-}
-
-export function fetchDuck (duckId) {
-  return ref.child(`ducks/${duckId}`).once('value')
-    .then((snapshot) => snapshot.val())
-}
-
-export function fetchLikeCount (duckId) {
-  return ref.child(`likeCount/${duckId}`).once('value')
-    .then((snapshot) => snapshot.val() || 0)
-}
-
-export function postReply (duckId, reply) {
-  const replyId = ref.child(`replies/${duckId}`).push().key
-  const replyWithId = {...reply, replyId}
-  const replyPromise = ref.child(`replies/${duckId}/${replyId}`).set(replyWithId)
-
-  return {
-    replyWithId,
-    replyPromise,
-  }
-}
-
-export function fetchReplies (duckId) {
-  return ref.child(`replies/${duckId}`).once('value')
-    .then((snapshot) => snapshot.val() || {})
-}
+*/

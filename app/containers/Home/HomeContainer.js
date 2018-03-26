@@ -4,7 +4,7 @@ import { Home } from 'components'
 const HomeContainer = React.createClass({
   render () {
     return (
-      <Home />
+      <span>Hang in there while we initialze this application for you. :)</span>
     )
   },
 })

@@ -3,33 +3,67 @@ import { Authenticate } from 'components'
 import auth from 'helpers/auth'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as userActionCreators from 'redux/modules/users'
+
+import * as authenticationActions from 'redux/modules/authentication'
+
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const AuthenticateContainer = React.createClass({
   propTypes: {
-    fetchAndHandleAuthedUser: PropTypes.func.isRequired,
+    fetchAndHandleAuth: PropTypes.func.isRequired,
     isFetching: PropTypes.bool.isRequired,
     error: PropTypes.string.isRequired,
   },
   contextTypes: {
     router: PropTypes.object.isRequired,
   },
-  handleAuth (e) {
-    e.preventDefault()
-    this.props.fetchAndHandleAuthedUser()
-      .then(() => this.context.router.replace('feed'))
+  getInitialState () {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  handleLogin () {
+    this.props.fetchAndHandleAuth(this.state.email, this.state.password)
+      .then(() => this.context.router.replace('addTransaction'))
   },
   render () {
     return (
-      <Authenticate
-        onAuth={this.handleAuth}
-        isFetching={this.props.isFetching}
-        error={this.props.error} />
+      <div>
+        <TextField
+          floatingLabelText='email'
+          fullWidth={true}
+          value={this.state.email}
+          onChange={(e, value) => { this.setState({email: value}) }}/>
+
+        <TextField
+          floatingLabelText='password'
+          fullWidth={true}
+          type={'password'}
+          value={this.state.password}
+          onChange={(e, value) => { this.setState({password: value}) }}/>
+
+        <RaisedButton
+          label='Login'
+          fullWidth={true}
+          primary={true}
+          disabled={this.props.isFetching}
+          onClick={this.handleLogin}/>
+
+          {this.props.error ? <p>Ops! Somehting went wrong: {error}</p> : null}
+
+      </div>
     )
   },
 })
 
 export default connect(
-  ({users}) => ({isFetching: users.isFetching, error: users.error}),
-  (dispatch) => bindActionCreators(userActionCreators, dispatch)
+  ({authentication}) => ({
+    isFetching: authentication.get('isFetching'),
+    error: authentication.get('error'),
+  }),
+  (dispatch) => bindActionCreators({
+    ...authenticationActions,
+  }, dispatch)
 )(AuthenticateContainer)

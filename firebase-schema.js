@@ -1,51 +1,24 @@
-/users
-  uid
+/people
+  personId
+    personId
     name
-    uid
-    avatar
+    role (team, client)
 
-/notifications
-  uid
-    notificationId
-      type
-      author
-      authorAvatar
-      uid (of author)
-      duckId
-      timestamp
-
-/ducks
-  duckId
-    avatar
-    duckId
+/projects
+  projectId
+    projectId
     name
-    text
-    timestamp
-    uid (of duck author)
+    status (active, complete)
 
-/likeCount
-  duckId
-    0
-
-/usersDucks
-  uid
-    duckId
-      avatar
-      duckId
-      name
-      text
+/transactions
+  projectId
+    transactionId
+      projectId
+      transactionId
+      amount
       timestamp
-      uid (of duck author)
-
-/replies
-  duckId
-    replyId
-      name
-      comment
-      uid
-      timestamp
-      avatar
-
-/usersLikes
-  uid
-    duckId: true
+      title
+      isOutbound
+      recievedByPersonId
+      paidByPersonId
+      comments

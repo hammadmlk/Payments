@@ -1,19 +1,30 @@
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 import {
-  MainContainer, HomeContainer, AuthenticateContainer, FeedContainer,
-  LogoutContainer, UserContainer, DuckDetailsContainer } from 'containers'
+  MainContainer,
+  HomeContainer,
+  AuthenticateContainer,
+  LogoutContainer,
+  AddTransactionContainer,
+  TransactionsContainer,
+  ProjectsContainer,
+  PeopleContainer,
+} from 'containers'
 
 export default function getRoutes (checkAuth, history) {
   return (
     <Router history={history}>
       <Route path='/' component={MainContainer}>
-        <Route path='auth' component={AuthenticateContainer} onEnter={checkAuth} />
-        <Route path='feed' component={FeedContainer} onEnter={checkAuth} />
-        <Route path='logout' component={LogoutContainer} />
-        <Route path='/:uid' component={UserContainer} onEnter={checkAuth} />
-        <Route path='duckDetail/:duckId' component={DuckDetailsContainer} onEnter={checkAuth} />
         <IndexRoute component={HomeContainer} onEnter={checkAuth}/>
+
+        <Route path='auth' component={AuthenticateContainer} />
+        <Route path='logout' component={LogoutContainer} />
+
+        <Route path='addTransaction' component={AddTransactionContainer} onEnter={checkAuth} />
+        <Route path='transactions' component={TransactionsContainer} onEnter={checkAuth} />
+        <Route path='projects' component={ProjectsContainer} onEnter={checkAuth} />
+        <Route path='people' component={PeopleContainer} onEnter={checkAuth} />
+
       </Route>
     </Router>
   )

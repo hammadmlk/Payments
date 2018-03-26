@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { logoutAndUnauth } from 'redux/modules/users'
+import { logoutAndUnauth } from 'redux/modules/authentication'
 import { Logout } from 'components'
 
 const LogoutContainer = React.createClass({
@@ -11,7 +11,7 @@ const LogoutContainer = React.createClass({
     this.props.dispatch(logoutAndUnauth())
   },
   render () {
-    return <Logout />
+    return <span>Logging you out... any moment now :)</span>
   },
 })
 
