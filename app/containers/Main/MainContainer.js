@@ -30,11 +30,9 @@ const MainContainer = React.createClass({
   componentDidMount () {
     firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
-        if (this.props.location.pathname === '/') {
-          this.context.router.replace('addtransaction')
-        }
         this.props.fetchAndHandlePeople()
         this.props.fetchAndHandleProjects()
+        this.context.router.replace('/')
       } else {
         this.context.router.replace('auth')
       }
