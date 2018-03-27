@@ -16,7 +16,7 @@ import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import Paper from 'material-ui/Paper'
 
-const AddTransactionContainer = React.createClass({
+const TransactionAddContainer = React.createClass({
   propTypes: {
     addAndHandleTransaction: PropTypes.func.isRequired,
     people: PropTypes.object.isRequired,
@@ -189,4 +189,4 @@ export default connect(
   (dispatch) => bindActionCreators({
     ...transactionActions,
   }, dispatch)
-)(AddTransactionContainer)
+)(TransactionAddContainer)

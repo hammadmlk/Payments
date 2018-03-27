@@ -7,7 +7,7 @@ import * as styles from 'sharedStyles/styles.css'
 import * as peopleActions from 'redux/modules/people'
 import * as projectActions from 'redux/modules/projects'
 
-import { AddTransactionContainer } from 'containers'
+import { TransactionAddContainer } from 'containers'
 import { Navigation } from 'components'
 
 import FontIcon from 'material-ui/FontIcon'
