@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseAuth } from 'config/constants'
+import * as styles from 'sharedStyles/styles.css'
 
 import * as peopleActions from 'redux/modules/people'
 import * as projectActions from 'redux/modules/projects'

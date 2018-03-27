@@ -30,7 +30,7 @@ const AuthenticateContainer = React.createClass({
   },
   render () {
     return (
-      <div>
+      <div style={{padding: '0.5em'}}>
         <TextField
           floatingLabelText='email'
           fullWidth={true}
@@ -52,7 +52,6 @@ const AuthenticateContainer = React.createClass({
           onClick={this.handleLogin}/>
 
           {this.props.error ? <p>Ops! Somehting went wrong: {error}</p> : null}
-
       </div>
     )
   },
